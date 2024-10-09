@@ -1,0 +1,44 @@
+{
+  "name": "nillys-react-table-library",
+  "version": "1.0.10",
+  "files": [
+    "nrtl/",
+    "LICENSE.md",
+    "nrtl/nrtl.css"
+  ],
+  "main": "nrtl/index.js",
+  "module": "nrtl/index.esm.js",
+  "types": "nrtl/index.d.ts",
+  "exports": {
+    ".": {
+      "import": "./nrtl/index.mjs",
+      "require": "./nrtl/index.js"
+    },
+    "./style": {
+      "import": "./nrtl/nrtl.css",
+      "default": "./nrtl/nrtl.css"
+    }
+  },
+  "style": "nrtl/nrtl.css",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "build:css": "sass src/nrtl.scss nrtl/nrtl.css --style=compressed",
+    "build": "tsup src/index.ts --format esm,cjs --dts --out-dir nrtl"
+  },
+
+  "keywords": [],
+  "author": "",
+  "license": "NRTL-NonCommercial",
+  "description": "",
+  "dependencies": {
+    "react": "^18.3.1",
+    "react-dom": "^18.3.1"
+  },
+  "devDependencies": {
+    "@types/react": "^18.3.11",
+    "@types/react-dom": "^18.3.0",
+    "sass": "^1.79.4",
+    "tsup": "^8.3.0",
+    "typescript": "^5.6.3"
+  }
+}
