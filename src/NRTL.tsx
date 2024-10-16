@@ -1,33 +1,34 @@
 // styles
-import '../nrtl/nrtl.css'
+import "../nrtl/nrtl.css";
 
 // types
-import { ReactElement, ChangeEvent, CSSProperties } from 'react'
+import { ReactElement, ChangeEvent, CSSProperties } from "react";
 interface INRTLProps {
-  datas: INRTL
-  headerBackgroundColor?: string
-  headerHoverBackgroundColor?: string
-  textColor?: string
-  rowColor?: string
-  rowHoverColor?: string
-  hoverTextColor?: string
-  disabledButtonColor?: string
-  columnSortingColor?: string
-  columnSortingFullFilledColor?: string
-  showSearchBar?: boolean
-  showItemsPerPageSelector?: boolean
-  showPagination?: boolean
-  showPreviousNextButtons?: boolean
-  enableColumnSorting?: boolean
-  itemsPerPageOptions?: number[]
+  datas: INRTL;
+  headerBackgroundColor?: string;
+  headerHoverBackgroundColor?: string;
+  textColor?: string;
+  rowColor?: string;
+  rowHoverColor?: string;
+  hoverTextColor?: string;
+  disabledButtonColor?: string;
+  columnSortingColor?: string;
+  columnSortingFullFilledColor?: string;
+  showSearchBar?: boolean;
+  showItemsPerPageSelector?: boolean;
+  showPagination?: boolean;
+  showPreviousNextButtons?: boolean;
+  enableColumnSorting?: boolean;
+  itemsPerPageOptions?: number[];
+  language?: "En" | "Fr" | string;
 }
 interface INRTL {
-  tableHead: string[]
-  tableBody: string[][]
+  tableHead: string[];
+  tableBody: string[][];
 }
 
 // hooks
-import React, { useState, useMemo, useEffect } from 'react'
+import React, { useState, useMemo, useEffect } from "react";
 
 export default function NRTL({
   datas,
@@ -46,47 +47,48 @@ export default function NRTL({
   showPreviousNextButtons,
   enableColumnSorting,
   itemsPerPageOptions = [25, 50, 100],
+  language = "En",
 }: INRTLProps): ReactElement {
-  const [page, setPage] = useState<number>(1)
+  const [page, setPage] = useState<number>(1);
   const [itemsPerPage, setItemsPerPage] = useState<number>(
     itemsPerPageOptions[0],
-  )
+  );
   const [sortConfig, setSortConfig] = useState<{
-    key: number
-    direction: string
-  } | null>(null)
-  const [searchTerm, setSearchTerm] = useState<string>('')
+    key: number;
+    direction: string;
+  } | null>(null);
+  const [searchTerm, setSearchTerm] = useState<string>("");
 
   const removeAccents: (string: string) => string = (
     string: string,
   ): string => {
-    return string.normalize('NFD').replace(/[\u0300-\u036f]/g, '')
-  }
+    return string.normalize("NFD").replace(/[\u0300-\u036f]/g, "");
+  };
 
   const sortedData: string[][] | undefined = useMemo(():
     | string[][]
     | undefined => {
-    let sortableData: string[][] = [...datas.tableBody]
+    let sortableData: string[][] = [...datas.tableBody];
 
     if (sortConfig !== null) {
       sortableData = sortableData.sort((a: string[], b: string[]): number => {
-        const aValue: string = a[sortConfig.key]
-        const bValue: string = b[sortConfig.key]
+        const aValue: string = a[sortConfig.key];
+        const bValue: string = b[sortConfig.key];
 
         if (!isNaN(Date.parse(aValue)) && !isNaN(Date.parse(bValue))) {
-          return sortConfig.direction === 'ascending'
+          return sortConfig.direction === "ascending"
             ? new Date(aValue).getTime() - new Date(bValue).getTime()
-            : new Date(bValue).getTime() - new Date(aValue).getTime()
+            : new Date(bValue).getTime() - new Date(aValue).getTime();
         } else if (!isNaN(Number(aValue)) && !isNaN(Date.parse(bValue))) {
-          return sortConfig.direction === 'ascending'
+          return sortConfig.direction === "ascending"
             ? Number(aValue) - Number(bValue)
-            : Number(bValue) - Number(aValue)
+            : Number(bValue) - Number(aValue);
         } else {
-          return sortConfig.direction === 'ascending'
+          return sortConfig.direction === "ascending"
             ? aValue.localeCompare(bValue)
-            : bValue.localeCompare(aValue)
+            : bValue.localeCompare(aValue);
         }
-      })
+      });
     }
 
     if (searchTerm.length > 0) {
@@ -94,92 +96,94 @@ export default function NRTL({
         return row.some((cell: string): boolean => {
           return removeAccents(cell.toLowerCase()).includes(
             removeAccents(searchTerm.toLowerCase()),
-          )
-        })
-      })
+          );
+        });
+      });
     }
 
     return sortableData.filter((row: string[]): boolean => {
       return row.some((cell: string): boolean => {
-        return cell.toLowerCase().includes(searchTerm.toLowerCase())
-      })
-    })
-  }, [datas.tableBody, sortConfig, searchTerm])
+        return cell.toLowerCase().includes(searchTerm.toLowerCase());
+      });
+    });
+  }, [datas.tableBody, sortConfig, searchTerm]);
 
-  const totalPages: number = Math.ceil(sortedData!.length / itemsPerPage)
+  const totalPages: number = Math.ceil(sortedData!.length / itemsPerPage);
 
   const currentData: string[][] = useMemo((): string[][] => {
     if (showPagination) {
-      const startIndex: number = (page - 1) * itemsPerPage
-      const endIndex: number = startIndex + itemsPerPage
-      return sortedData!.slice(startIndex, endIndex)
+      const startIndex: number = (page - 1) * itemsPerPage;
+      const endIndex: number = startIndex + itemsPerPage;
+      return sortedData!.slice(startIndex, endIndex);
     } else {
-      return sortedData!
+      return sortedData!;
     }
-  }, [sortedData, page, itemsPerPage])
+  }, [sortedData, page, itemsPerPage]);
 
   const handlePreviousPage: () => void = (): void => {
-    setPage((prevPage: number): number => Math.max(prevPage - 1, 1))
-  }
+    setPage((prevPage: number): number => Math.max(prevPage - 1, 1));
+  };
 
   const handleNextPage: () => void = (): void => {
-    setPage((prevPage: number): number => Math.min(prevPage + 1, totalPages))
-  }
+    setPage((prevPage: number): number => Math.min(prevPage + 1, totalPages));
+  };
 
   const handleItemsPerPageChange: (
     event: ChangeEvent<HTMLSelectElement>,
   ) => void = (event: ChangeEvent<HTMLSelectElement>): void => {
-    setItemsPerPage(Number(event.target.value))
-    setPage(1)
-  }
+    setItemsPerPage(Number(event.target.value));
+    setPage(1);
+  };
 
   const requestSort: (key: number) => void = (key: number): void => {
-    let direction: string = 'ascending'
+    let direction: string = "ascending";
     if (
       sortConfig &&
       sortConfig.key === key &&
-      sortConfig.direction === 'ascending'
+      sortConfig.direction === "ascending"
     ) {
-      direction = 'descending'
+      direction = "descending";
     }
-    setSortConfig({ key, direction })
-  }
+    setSortConfig({ key, direction });
+  };
 
   const handleSearchChange: (event: ChangeEvent<HTMLInputElement>) => void = (
     event: ChangeEvent<HTMLInputElement>,
   ): void => {
-    setSearchTerm(event.target.value)
-    setPage(1)
-  }
+    setSearchTerm(event.target.value);
+    setPage(1);
+  };
 
-  useEffect(():void => {
+  useEffect((): void => {
     if (!itemsPerPageOptions.includes(itemsPerPage)) {
-      setItemsPerPage(itemsPerPageOptions[0])
+      setItemsPerPage(itemsPerPageOptions[0]);
     }
-  }, [itemsPerPageOptions, itemsPerPage])
+  }, [itemsPerPageOptions, itemsPerPage]);
 
   return (
     <section
-      id={'NRTL'}
+      id={"NRTL"}
       style={
         {
-          '--header-bg-color': headerBackgroundColor,
-          '--header-hover-bg-color': headerHoverBackgroundColor,
-          '--row-color': rowColor,
-          '--row-hover-color': rowHoverColor,
-          '--text-color': textColor,
-          '--hover-text-color': hoverTextColor,
-          '--disabled-button-color': disabledButtonColor,
-          '--columnSortingColor': columnSortingColor,
-          '--columnSortingFullFilledColor': columnSortingFullFilledColor,
+          "--header-bg-color": headerBackgroundColor,
+          "--header-hover-bg-color": headerHoverBackgroundColor,
+          "--row-color": rowColor,
+          "--row-hover-color": rowHoverColor,
+          "--text-color": textColor,
+          "--hover-text-color": hoverTextColor,
+          "--disabled-button-color": disabledButtonColor,
+          "--columnSortingColor": columnSortingColor,
+          "--columnSortingFullFilledColor": columnSortingFullFilledColor,
         } as CSSProperties
       }
     >
       <>
-        <div className={'tableHeader'}>
+        <div className={"tableHeader"}>
           {showItemsPerPageSelector && itemsPerPageOptions.length > 0 && (
             <div className="selectContainer">
-              <label htmlFor="itemsPerPage">Show</label>
+              <label htmlFor="itemsPerPage">
+                {language === "En" ? "Show" : "Afficher"}
+              </label>
               <select
                 id="itemsPerPage"
                 value={itemsPerPage}
@@ -193,12 +197,16 @@ export default function NRTL({
                   ),
                 )}
               </select>
-              <label htmlFor="itemsPerPage">entries</label>
+              <label htmlFor="itemsPerPage">
+                {language === "En" ? "entries" : "entrée"}
+              </label>
             </div>
           )}
           {showSearchBar && (
             <div className="searchContainer">
-              <label htmlFor="filter">Search: </label>
+              <label htmlFor="filter">
+                {language === "En" ? "Search" : "Rechercher"}:{" "}
+              </label>
               <input id="filter" type="text" onChange={handleSearchChange} />
             </div>
           )}
@@ -217,7 +225,7 @@ export default function NRTL({
                         : undefined
                     }
                     style={{
-                      cursor: enableColumnSorting ? 'pointer' : 'default',
+                      cursor: enableColumnSorting ? "pointer" : "default",
                     }}
                   >
                     {head}
@@ -226,9 +234,9 @@ export default function NRTL({
                         <span
                           className={`chevron ${
                             sortConfig?.key === index &&
-                            sortConfig.direction === 'ascending'
-                              ? 'chevron-active'
-                              : ''
+                            sortConfig.direction === "ascending"
+                              ? "chevron-active"
+                              : ""
                           }`}
                         >
                           <svg width="12" height="12" viewBox="0 0 20 20">
@@ -241,9 +249,9 @@ export default function NRTL({
                         <span
                           className={`chevron ${
                             sortConfig?.key === index &&
-                            sortConfig.direction === 'descending'
-                              ? 'chevron-active'
-                              : ''
+                            sortConfig.direction === "descending"
+                              ? "chevron-active"
+                              : ""
                           }`}
                         >
                           <svg width="12" height="12" viewBox="0 0 20 20">
@@ -274,9 +282,11 @@ export default function NRTL({
               <tr>
                 <td
                   colSpan={datas.tableHead.length}
-                  style={{ textAlign: 'center' }}
+                  style={{ textAlign: "center" }}
                 >
-                  No data available in table
+                  {language === "En"
+                    ? "No data available in table"
+                    : "Aucune donnée disponible dans le tableau"}
                 </td>
               </tr>
             )}
@@ -286,8 +296,9 @@ export default function NRTL({
           <div className="tableFooter">
             {sortedData && (
               <p>
-                Showing {Math.min(page * itemsPerPage, sortedData.length)}/
-                {sortedData.length} entries
+                {language === "En"
+                  ? `Showing ${Math.min(page * itemsPerPage, sortedData.length)}/${sortedData.length} entries`
+                  : `Affichage de ${Math.min(page * itemsPerPage, sortedData.length)}/${sortedData.length} entrées`}
               </p>
             )}
             {showPreviousNextButtons && (
@@ -297,14 +308,14 @@ export default function NRTL({
                   onClick={handlePreviousPage}
                   disabled={page === 1}
                 >
-                  Previous
+                  {language === "En" ? "Previous" : "Précédent"}
                 </button>
                 <button
                   className="button"
                   onClick={handleNextPage}
                   disabled={page === totalPages}
                 >
-                  Next
+                  {language === "En" ? "Next" : "Suivant"}
                 </button>
               </div>
             )}
@@ -312,5 +323,5 @@ export default function NRTL({
         )}
       </>
     </section>
-  )
+  );
 }

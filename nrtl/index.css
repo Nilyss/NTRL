@@ -57,6 +57,23 @@
   padding: 10px;
   text-align: center;
   position: relative;
+  font-weight: 700;
+}
+@media (max-width: 1024px) {
+  #NRTL thead th {
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+  }
+}
+@media (max-width: 1024px) {
+  #NRTL thead th:hover {
+    white-space: normal;
+    overflow: visible;
+  }
+  #NRTL thead th:hover .chevron svg {
+    opacity: 0;
+  }
 }
 #NRTL thead th:hover {
   background: var(--header-hover-bg-color, rgb(165.3480662983, 183.2928176796, 48.7071823204));
@@ -72,6 +89,12 @@
 #NRTL thead th .chevron {
   stroke: var(--column-sorting-color, #dcdcdc);
   fill: var(--column-sorting-color, #dcdcdc);
+}
+@media (max-width: 1024px) {
+  #NRTL thead th .chevron svg {
+    width: 10px !important;
+    height: 10px !important;
+  }
 }
 #NRTL thead th .chevron-active {
   stroke: var(--column-sorting-full-filled-color, #36395a);

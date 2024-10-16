@@ -17,11 +17,12 @@ interface INRTLProps {
     showPreviousNextButtons?: boolean;
     enableColumnSorting?: boolean;
     itemsPerPageOptions?: number[];
+    language?: "En" | "Fr" | string;
 }
 interface INRTL {
     tableHead: string[];
     tableBody: string[][];
 }
-declare function NRTL({ datas, headerBackgroundColor, headerHoverBackgroundColor, textColor, rowColor, rowHoverColor, hoverTextColor, columnSortingColor, columnSortingFullFilledColor, disabledButtonColor, showSearchBar, showItemsPerPageSelector, showPagination, showPreviousNextButtons, enableColumnSorting, itemsPerPageOptions, }: INRTLProps): ReactElement;
+declare function NRTL({ datas, headerBackgroundColor, headerHoverBackgroundColor, textColor, rowColor, rowHoverColor, hoverTextColor, columnSortingColor, columnSortingFullFilledColor, disabledButtonColor, showSearchBar, showItemsPerPageSelector, showPagination, showPreviousNextButtons, enableColumnSorting, itemsPerPageOptions, language, }: INRTLProps): ReactElement;
 
 export { NRTL };

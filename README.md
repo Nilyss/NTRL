@@ -2,6 +2,8 @@
 
 **Nillys React Table Library (NRTL)** is a customizable and easy-to-use React component for displaying data tables with features like sorting, pagination, and search. This library allows you to customize the table's styles and behavior to suit your needs.
 
+![demo](https://imgur.com/rOQtnXr)
+
 ## Installation
 
 To install this package, use npm:
@@ -50,24 +52,26 @@ export default App
 
 The `NRTL` component comes with a wide range of customization options. Below is a list of available props with their default values.
 
-| Prop                            | Type              | Description                                                                                         | Default                                      |
-|----------------------------------|-------------------|-----------------------------------------------------------------------------------------------------|----------------------------------------------|
-| `datas`                         | `INRTL`           | The data for the table, containing `tableHead` (column titles) and `tableBody` (row data).           | *Required*                                   |
-| `headerBackgroundColor`          | `string`          | Background color of the table header.                                                                | `linear-gradient(to left, #d5e065, #a8c24e)` |
-| `headerHoverBackgroundColor`     | `string`          | Background color of the table header on hover.                                                       | `#a8c24e`                                    |
-| `textColor`                      | `string`          | Color of the text inside the table.                                                                  | `#36395a`                                    |
-| `rowColor`                       | `string`          | Background color of the table rows.                                                                  | `#ffffff`                                    |
-| `rowHoverColor`                  | `string`          | Background color of the rows when hovered.                                                           | `#36395a`                                    |
-| `hoverTextColor`                 | `string`          | Text color in the rows when hovered.                                                                 | `#ffffff`                                    |
-| `disabledButtonColor`            | `string`          | Color of disabled buttons (pagination buttons, etc.).                                                | `#dcdcdc`                                    |
-| `columnSortingColor`             | `string`          | Color of the sorting indicator chevron.                                                              | `#dcdcdc`                                    |
-| `columnSortingFullFilledColor`   | `string`          | Color of the chevron when a column is sorted.                                                        | `#36395a`                                    |
-| `showSearchBar`                  | `boolean`         | Displays or hides the search bar above the table.                                                    | `false`                                      |
-| `showItemsPerPageSelector`       | `boolean`         | Displays or hides the items-per-page selector.                                                       | `false`                                      |
-| `showPagination`                 | `boolean`         | Displays or hides pagination controls.                                                               | `false`                                      |
-| `showPreviousNextButtons`        | `boolean`         | Displays or hides the previous/next buttons in pagination.                                           | `false`                                      |
-| `enableColumnSorting`            | `boolean`         | Enables or disables sorting by column.                                                               | `false`                                      |
-| `itemsPerPageOptions`            | `number[]`        | Array of options for the number of items per page.                                                   | `[25, 50, 100]`                              |
+| Prop                           | Type               | Description                                                                                | Default                                      |
+|--------------------------------|--------------------|--------------------------------------------------------------------------------------------|----------------------------------------------|
+| `datas`                        | `INRTL`            | The data for the table, containing `tableHead` (column titles) and `tableBody` (row data). | *Required*                                   |
+| `headerBackgroundColor`        | `string`           | Background color of the table header.                                                      | `linear-gradient(to left, #d5e065, #a8c24e)` |
+| `headerHoverBackgroundColor`   | `string`           | Background color of the table header on hover.                                             | `#a8c24e`                                    |
+| `textColor`                    | `string`           | Color of the text inside the table.                                                        | `#36395a`                                    |
+| `rowColor`                     | `string`           | Background color of the table rows.                                                        | `#ffffff`                                    |
+| `rowHoverColor`                | `string`           | Background color of the rows when hovered.                                                 | `#36395a`                                    |
+| `hoverTextColor`               | `string`           | Text color in the rows when hovered.                                                       | `#ffffff`                                    |
+| `disabledButtonColor`          | `string`           | Color of disabled buttons (pagination buttons, etc.).                                      | `#dcdcdc`                                    |
+| `columnSortingColor`           | `string`           | Color of the sorting indicator chevron.                                                    | `#dcdcdc`                                    |
+| `columnSortingFullFilledColor` | `string`           | Color of the chevron when a column is sorted.                                              | `#36395a`                                    |
+| `showSearchBar`                | `boolean`          | Displays or hides the search bar above the table.                                          | `false`                                      |
+| `showItemsPerPageSelector`     | `boolean`          | Displays or hides the items-per-page selector.                                             | `false`                                      |
+| `showPagination`               | `boolean`          | Displays or hides pagination controls.                                                     | `false`                                      |
+| `showPreviousNextButtons`      | `boolean`          | Displays or hides the previous/next buttons in pagination.                                 | `false`                                      |
+| `enableColumnSorting`          | `boolean`          | Enables or disables sorting by column.                                                     | `false`                                      |
+| `itemsPerPageOptions`          | `number[]`         | Array of options for the number of items per page.                                         | `[25, 50, 100]`                              |
+| `language`                     | `En` `Fr` `string` | Language of table elements.                                                                | `En`                                         |
+
 
 ### Data Structure (`INRTL`)
 
@@ -128,6 +132,7 @@ const App = () => {
         showPagination={true}
         enableColumnSorting={true}
         itemsPerPageOptions={[5, 10, 25]}
+        language={'Fr'}
       />
     </div>
   )

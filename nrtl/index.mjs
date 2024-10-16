@@ -16,7 +16,8 @@ function NRTL({
   showPagination,
   showPreviousNextButtons,
   enableColumnSorting,
-  itemsPerPageOptions = [25, 50, 100]
+  itemsPerPageOptions = [25, 50, 100],
+  language = "En"
 }) {
   const [page, setPage] = useState(1);
   const [itemsPerPage, setItemsPerPage] = useState(
@@ -109,7 +110,7 @@ function NRTL({
         "--columnSortingFullFilledColor": columnSortingFullFilledColor
       }
     },
-    /* @__PURE__ */ React.createElement(React.Fragment, null, /* @__PURE__ */ React.createElement("div", { className: "tableHeader" }, showItemsPerPageSelector && itemsPerPageOptions.length > 0 && /* @__PURE__ */ React.createElement("div", { className: "selectContainer" }, /* @__PURE__ */ React.createElement("label", { htmlFor: "itemsPerPage" }, "Show"), /* @__PURE__ */ React.createElement(
+    /* @__PURE__ */ React.createElement(React.Fragment, null, /* @__PURE__ */ React.createElement("div", { className: "tableHeader" }, showItemsPerPageSelector && itemsPerPageOptions.length > 0 && /* @__PURE__ */ React.createElement("div", { className: "selectContainer" }, /* @__PURE__ */ React.createElement("label", { htmlFor: "itemsPerPage" }, language === "En" ? "Show" : "Afficher"), /* @__PURE__ */ React.createElement(
       "select",
       {
         id: "itemsPerPage",
@@ -119,7 +120,7 @@ function NRTL({
       itemsPerPageOptions.map(
         (optionValue) => /* @__PURE__ */ React.createElement("option", { key: optionValue, value: optionValue }, optionValue)
       )
-    ), /* @__PURE__ */ React.createElement("label", { htmlFor: "itemsPerPage" }, "entries")), showSearchBar && /* @__PURE__ */ React.createElement("div", { className: "searchContainer" }, /* @__PURE__ */ React.createElement("label", { htmlFor: "filter" }, "Search: "), /* @__PURE__ */ React.createElement("input", { id: "filter", type: "text", onChange: handleSearchChange }))), /* @__PURE__ */ React.createElement("table", null, /* @__PURE__ */ React.createElement("thead", null, /* @__PURE__ */ React.createElement("tr", null, datas.tableHead.map(
+    ), /* @__PURE__ */ React.createElement("label", { htmlFor: "itemsPerPage" }, language === "En" ? "entries" : "entr\xE9e")), showSearchBar && /* @__PURE__ */ React.createElement("div", { className: "searchContainer" }, /* @__PURE__ */ React.createElement("label", { htmlFor: "filter" }, language === "En" ? "Search" : "Rechercher", ":", " "), /* @__PURE__ */ React.createElement("input", { id: "filter", type: "text", onChange: handleSearchChange }))), /* @__PURE__ */ React.createElement("table", null, /* @__PURE__ */ React.createElement("thead", null, /* @__PURE__ */ React.createElement("tr", null, datas.tableHead.map(
       (head, index) => /* @__PURE__ */ React.createElement(
         "th",
         {
@@ -160,15 +161,15 @@ function NRTL({
         colSpan: datas.tableHead.length,
         style: { textAlign: "center" }
       },
-      "No data available in table"
-    )))), showPagination && /* @__PURE__ */ React.createElement("div", { className: "tableFooter" }, sortedData && /* @__PURE__ */ React.createElement("p", null, "Showing ", Math.min(page * itemsPerPage, sortedData.length), "/", sortedData.length, " entries"), showPreviousNextButtons && /* @__PURE__ */ React.createElement("div", { className: "buttonContainer" }, /* @__PURE__ */ React.createElement(
+      language === "En" ? "No data available in table" : "Aucune donn\xE9e disponible dans le tableau"
+    )))), showPagination && /* @__PURE__ */ React.createElement("div", { className: "tableFooter" }, sortedData && /* @__PURE__ */ React.createElement("p", null, language === "En" ? `Showing ${Math.min(page * itemsPerPage, sortedData.length)}/${sortedData.length} entries` : `Affichage de ${Math.min(page * itemsPerPage, sortedData.length)}/${sortedData.length} entr\xE9es`), showPreviousNextButtons && /* @__PURE__ */ React.createElement("div", { className: "buttonContainer" }, /* @__PURE__ */ React.createElement(
       "button",
       {
         className: "button",
         onClick: handlePreviousPage,
         disabled: page === 1
       },
-      "Previous"
+      language === "En" ? "Previous" : "Pr\xE9c\xE9dent"
     ), /* @__PURE__ */ React.createElement(
       "button",
       {
@@ -176,7 +177,7 @@ function NRTL({
         onClick: handleNextPage,
         disabled: page === totalPages
       },
-      "Next"
+      language === "En" ? "Next" : "Suivant"
     ))))
   );
 }
