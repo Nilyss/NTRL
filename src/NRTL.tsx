@@ -51,6 +51,26 @@ export default function NRTL({
   itemsPerPageOptions = [25, 50, 100],
   language = "En",
 }: INRTLProps): ReactElement {
+  function parseDate(dateString: string): number | null {
+    const isoDate = Date.parse(dateString);
+    if (!isNaN(isoDate)) {
+      return isoDate;
+    }
+
+    const parts = dateString.split("/");
+    if (parts.length === 3) {
+      const day = parseInt(parts[0], 10);
+      const month = parseInt(parts[1], 10) - 1;
+      const year = parseInt(parts[2], 10);
+      const date = new Date(year, month, day);
+      if (!isNaN(date.getTime())) {
+        return date.getTime();
+      }
+    }
+
+    return null;
+  }
+
   const [page, setPage] = useState<number>(1);
   const [itemsPerPage, setItemsPerPage] = useState<number>(
     itemsPerPageOptions[0],
@@ -84,11 +104,14 @@ export default function NRTL({
         const aValue: string = a[sortConfig.key];
         const bValue: string = b[sortConfig.key];
 
-        if (!isNaN(Date.parse(aValue)) && !isNaN(Date.parse(bValue))) {
+        const aDate = parseDate(aValue);
+        const bDate = parseDate(bValue);
+
+        if (aDate !== null && bDate !== null) {
           return sortConfig.direction === "ascending"
-            ? new Date(aValue).getTime() - new Date(bValue).getTime()
-            : new Date(bValue).getTime() - new Date(aValue).getTime();
-        } else if (!isNaN(Number(aValue)) && !isNaN(Date.parse(bValue))) {
+            ? aDate - bDate
+            : bDate - aDate;
+        } else if (!isNaN(Number(aValue)) && !isNaN(Number(bValue))) {
           return sortConfig.direction === "ascending"
             ? Number(aValue) - Number(bValue)
             : Number(bValue) - Number(aValue);
@@ -110,11 +133,7 @@ export default function NRTL({
       });
     }
 
-    return sortableData.filter((row: string[]): boolean => {
-      return row.some((cell: string): boolean => {
-        return cell.toLowerCase().includes(searchTerm.toLowerCase());
-      });
-    });
+    return sortableData;
   }, [datas.tableBody, sortConfig, searchTerm]);
 
   const totalPages: number = Math.ceil(sortedData!.length / itemsPerPage);

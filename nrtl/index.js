@@ -56,6 +56,23 @@ function NRTL({
   itemsPerPageOptions = [25, 50, 100],
   language = "En"
 }) {
+  function parseDate(dateString) {
+    const isoDate = Date.parse(dateString);
+    if (!isNaN(isoDate)) {
+      return isoDate;
+    }
+    const parts = dateString.split("/");
+    if (parts.length === 3) {
+      const day = parseInt(parts[0], 10);
+      const month = parseInt(parts[1], 10) - 1;
+      const year = parseInt(parts[2], 10);
+      const date = new Date(year, month, day);
+      if (!isNaN(date.getTime())) {
+        return date.getTime();
+      }
+    }
+    return null;
+  }
   const [page, setPage] = (0, import_react.useState)(1);
   const [itemsPerPage, setItemsPerPage] = (0, import_react.useState)(
     itemsPerPageOptions[0]
@@ -75,9 +92,11 @@ function NRTL({
       sortableData = sortableData.sort((a, b) => {
         const aValue = a[sortConfig.key];
         const bValue = b[sortConfig.key];
-        if (!isNaN(Date.parse(aValue)) && !isNaN(Date.parse(bValue))) {
-          return sortConfig.direction === "ascending" ? new Date(aValue).getTime() - new Date(bValue).getTime() : new Date(bValue).getTime() - new Date(aValue).getTime();
-        } else if (!isNaN(Number(aValue)) && !isNaN(Date.parse(bValue))) {
+        const aDate = parseDate(aValue);
+        const bDate = parseDate(bValue);
+        if (aDate !== null && bDate !== null) {
+          return sortConfig.direction === "ascending" ? aDate - bDate : bDate - aDate;
+        } else if (!isNaN(Number(aValue)) && !isNaN(Number(bValue))) {
           return sortConfig.direction === "ascending" ? Number(aValue) - Number(bValue) : Number(bValue) - Number(aValue);
         } else {
           return sortConfig.direction === "ascending" ? aValue.localeCompare(bValue) : bValue.localeCompare(aValue);
@@ -93,11 +112,7 @@ function NRTL({
         });
       });
     }
-    return sortableData.filter((row) => {
-      return row.some((cell) => {
-        return cell.toLowerCase().includes(searchTerm.toLowerCase());
-      });
-    });
+    return sortableData;
   }, [datas.tableBody, sortConfig, searchTerm]);
   const totalPages = Math.ceil(sortedData.length / itemsPerPage);
   const currentData = (0, import_react.useMemo)(() => {
