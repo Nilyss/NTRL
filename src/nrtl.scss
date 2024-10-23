@@ -20,6 +20,10 @@ $defaultColumnSortingFullFilledColor: #36395a;
   font-size: 12px;
   margin-top: 2em;
 
+  @media (max-width: 768px) {
+    width: 100%;
+  }
+
   --header-bg-color: #{$defaultTableBgColor};
   --header-hover-bg-color: #{$defaultHeaderHoverColor};
   --row-color: #{$defaultRowColor};
@@ -37,6 +41,10 @@ $defaultColumnSortingFullFilledColor: #36395a;
   align-items: center;
   justify-content: space-between;
   margin-bottom: 0.5em;
+
+  @media (max-width: 768px) {
+    padding: 1em;
+  }
 }
 
 #NRTL .tableHeader .selectContainer {
@@ -49,16 +57,31 @@ $defaultColumnSortingFullFilledColor: #36395a;
   display: flex;
   align-items: center;
   gap: 0.5em;
+
+  @media (max-width: 768px) {
+    justify-content: flex-end;
+  }
 }
 
 #NRTL .tableHeader .searchContainer input {
   border: 1px solid #36395a;
   padding: 0.5em;
   height: 1.7em;
+
+  @media (max-width: 768px) {
+    width: 50%;
+  }
 }
 
 #NRTL .tableHeader .searchContainer input:focus {
   outline: 3px solid #36395a;
+}
+
+#NRTL .tableWrapper {
+  @media (max-width: 768px) {
+    width: 100%;
+    overflow-x: auto;
+  }
 }
 
 #NRTL table {
@@ -68,6 +91,12 @@ $defaultColumnSortingFullFilledColor: #36395a;
   background: var(--header-bg-color, #{$defaultTableBgColor});
   border-radius: 10px;
   table-layout: fixed;
+
+  @media (max-width: 768px) {
+    width: 100%;
+    table-layout: auto;
+    border-radius: unset;
+  }
 }
 
 #NRTL thead th {
@@ -75,6 +104,7 @@ $defaultColumnSortingFullFilledColor: #36395a;
   text-align: center;
   position: relative;
   font-weight: 700;
+
   @media (max-width: 1024px) {
     overflow: hidden;
     white-space: nowrap;
@@ -100,10 +130,31 @@ $defaultColumnSortingFullFilledColor: #36395a;
 
 #NRTL thead th:hover:first-child {
   border-radius: 10px 0 0 0;
+
+  @media (max-width: 768px) {
+    border-radius: unset;
+  }
 }
 
 #NRTL thead th:hover:last-child {
   border-radius: 0 10px 0 0;
+
+  @media (max-width: 768px) {
+    border-radius: unset;
+  }
+}
+
+#NRTL thead th div {
+  display: flex;
+  flex-flow: column;
+  position: absolute;
+  right: 1.3dvw;
+  top: 0;
+
+  @media (max-width: 768px) {
+    top: -4px;
+    right: 2dvw;
+  }
 }
 
 #NRTL thead th .chevron {
@@ -116,6 +167,10 @@ $defaultColumnSortingFullFilledColor: #36395a;
     width: 10px !important;
     height: 10px !important;
   }
+  @media (max-width: 768px) {
+    width: 6px !important;
+    height: 6px !important;
+  }
 }
 
 #NRTL thead th .chevron-active {
@@ -127,14 +182,6 @@ $defaultColumnSortingFullFilledColor: #36395a;
     --column-sorting-full-filled-color,
     #{$defaultColumnSortingFullFilledColor}
   );
-}
-
-#NRTL thead th div {
-  display: flex;
-  flex-flow: column;
-  position: absolute;
-  right: 1.3dvw;
-  top: 0;
 }
 
 #NRTL thead th div > span:first-child {
@@ -183,10 +230,18 @@ $defaultColumnSortingFullFilledColor: #36395a;
 
 #NRTL tbody tr:last-child td:first-child {
   border-radius: 0 0 0 10px;
+
+  @media (max-width: 768px) {
+    border-radius: unset;
+  }
 }
 
 #NRTL tbody tr:last-child td:last-child {
   border-radius: 0 0 10px 0;
+
+  @media (max-width: 768px) {
+    border-radius: unset;
+  }
 }
 
 #NRTL .tableFooter {
@@ -195,6 +250,10 @@ $defaultColumnSortingFullFilledColor: #36395a;
   display: flex;
   justify-content: space-between;
   align-items: center;
+
+  @media (max-width: 768px) {
+    padding: 0 1.5em;
+  }
 }
 
 #NRTL .tableFooter .buttonContainer {
@@ -219,4 +278,13 @@ $defaultColumnSortingFullFilledColor: #36395a;
     #{$defaultDisabledButtonColor}
   ) !important;
   cursor: not-allowed !important;
+}
+
+#NRTL .tableFooter .buttonContainer .paginationIcn {
+  font-size: 1.4em;
+  cursor: pointer;
+}
+
+#NRTL .tableFooter .buttonContainer .disabled {
+  opacity: 0;
 }

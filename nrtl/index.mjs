@@ -1,5 +1,7 @@
 // src/NRTL.tsx
 import React, { useState, useMemo, useEffect } from "react";
+import { IoChevronBack } from "react-icons/io5";
+import { IoChevronForward } from "react-icons/io5";
 function NRTL({
   datas,
   headerBackgroundColor,
@@ -25,6 +27,10 @@ function NRTL({
   );
   const [sortConfig, setSortConfig] = useState(null);
   const [searchTerm, setSearchTerm] = useState("");
+  const [screenSize, setScreenSize] = useState({
+    width: window.innerWidth,
+    height: window.innerHeight
+  });
   const removeAccents = (string) => {
     return string.normalize("NFD").replace(/[\u0300-\u036f]/g, "");
   };
@@ -94,6 +100,18 @@ function NRTL({
       setItemsPerPage(itemsPerPageOptions[0]);
     }
   }, [itemsPerPageOptions, itemsPerPage]);
+  useEffect(() => {
+    const handleResize = () => {
+      setScreenSize({
+        width: window.innerWidth,
+        height: window.innerHeight
+      });
+    };
+    window.addEventListener("resize", handleResize);
+    return () => {
+      window.removeEventListener("resize", handleResize);
+    };
+  }, []);
   return /* @__PURE__ */ React.createElement(
     "section",
     {
@@ -120,7 +138,7 @@ function NRTL({
       itemsPerPageOptions.map(
         (optionValue) => /* @__PURE__ */ React.createElement("option", { key: optionValue, value: optionValue }, optionValue)
       )
-    ), /* @__PURE__ */ React.createElement("label", { htmlFor: "itemsPerPage" }, language === "En" ? "entries" : "entr\xE9e")), showSearchBar && /* @__PURE__ */ React.createElement("div", { className: "searchContainer" }, /* @__PURE__ */ React.createElement("label", { htmlFor: "filter" }, language === "En" ? "Search" : "Rechercher", ":", " "), /* @__PURE__ */ React.createElement("input", { id: "filter", type: "text", onChange: handleSearchChange }))), /* @__PURE__ */ React.createElement("table", null, /* @__PURE__ */ React.createElement("thead", null, /* @__PURE__ */ React.createElement("tr", null, datas.tableHead.map(
+    ), /* @__PURE__ */ React.createElement("label", { htmlFor: "itemsPerPage" }, language === "En" ? "entries" : "entr\xE9e")), showSearchBar && /* @__PURE__ */ React.createElement("div", { className: "searchContainer" }, /* @__PURE__ */ React.createElement("label", { htmlFor: "filter" }, language === "En" ? "Search" : "Rechercher", ":", " "), /* @__PURE__ */ React.createElement("input", { id: "filter", type: "text", onChange: handleSearchChange }))), /* @__PURE__ */ React.createElement("div", { className: "tableWrapper" }, /* @__PURE__ */ React.createElement("table", null, /* @__PURE__ */ React.createElement("thead", null, /* @__PURE__ */ React.createElement("tr", null, datas.tableHead.map(
       (head, index) => /* @__PURE__ */ React.createElement(
         "th",
         {
@@ -148,7 +166,13 @@ function NRTL({
           {
             className: `chevron ${(sortConfig == null ? void 0 : sortConfig.key) === index && sortConfig.direction === "descending" ? "chevron-active" : ""}`
           },
-          /* @__PURE__ */ React.createElement("svg", { width: "12", height: "12", viewBox: "0 0 20 20" }, /* @__PURE__ */ React.createElement("polyline", { points: "5,5 10,15 15,5", strokeWidth: "2" }))
+          /* @__PURE__ */ React.createElement("svg", { width: "12", height: "12", viewBox: "0 0 20 20" }, /* @__PURE__ */ React.createElement(
+            "polyline",
+            {
+              points: "5,5 10,15 15,5",
+              strokeWidth: "2"
+            }
+          ))
         ))
       )
     ))), /* @__PURE__ */ React.createElement("tbody", null, currentData.length > 0 ? currentData.map(
@@ -162,7 +186,19 @@ function NRTL({
         style: { textAlign: "center" }
       },
       language === "En" ? "No data available in table" : "Aucune donn\xE9e disponible dans le tableau"
-    )))), showPagination && /* @__PURE__ */ React.createElement("div", { className: "tableFooter" }, sortedData && /* @__PURE__ */ React.createElement("p", null, language === "En" ? `Showing ${Math.min(page * itemsPerPage, sortedData.length)}/${sortedData.length} entries` : `Affichage de ${Math.min(page * itemsPerPage, sortedData.length)}/${sortedData.length} entr\xE9es`), showPreviousNextButtons && /* @__PURE__ */ React.createElement("div", { className: "buttonContainer" }, /* @__PURE__ */ React.createElement(
+    ))))), showPagination && /* @__PURE__ */ React.createElement("div", { className: "tableFooter" }, sortedData && /* @__PURE__ */ React.createElement("p", null, language === "En" ? `Showing ${Math.min(page * itemsPerPage, sortedData.length)}/${sortedData.length} entries` : `Affichage de ${Math.min(page * itemsPerPage, sortedData.length)}/${sortedData.length} entr\xE9es`), showPreviousNextButtons && /* @__PURE__ */ React.createElement("div", { className: "buttonContainer" }, screenSize.width < 768 ? /* @__PURE__ */ React.createElement(React.Fragment, null, /* @__PURE__ */ React.createElement(
+      IoChevronBack,
+      {
+        className: page === 1 ? "disabled" : "paginationIcn",
+        onClick: handlePreviousPage
+      }
+    ), /* @__PURE__ */ React.createElement(
+      IoChevronForward,
+      {
+        className: page === totalPages ? "disabled" : "paginationIcn",
+        onClick: handleNextPage
+      }
+    )) : /* @__PURE__ */ React.createElement(React.Fragment, null, /* @__PURE__ */ React.createElement(
       "button",
       {
         className: "button",
@@ -178,7 +214,7 @@ function NRTL({
         disabled: page === totalPages
       },
       language === "En" ? "Next" : "Suivant"
-    ))))
+    )))))
   );
 }
 export {

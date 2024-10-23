@@ -27,8 +27,10 @@ interface INRTL {
   tableBody: string[][];
 }
 
-// hooks
+// hooks | library
 import React, { useState, useMemo, useEffect } from "react";
+import { IoChevronBack } from "react-icons/io5";
+import { IoChevronForward } from "react-icons/io5";
 
 export default function NRTL({
   datas,
@@ -58,6 +60,13 @@ export default function NRTL({
     direction: string;
   } | null>(null);
   const [searchTerm, setSearchTerm] = useState<string>("");
+  const [screenSize, setScreenSize] = useState<{
+    width: number;
+    height: number;
+  }>({
+    width: window.innerWidth,
+    height: window.innerHeight,
+  });
 
   const removeAccents: (string: string) => string = (
     string: string,
@@ -160,6 +169,20 @@ export default function NRTL({
     }
   }, [itemsPerPageOptions, itemsPerPage]);
 
+  useEffect(() => {
+    const handleResize = () => {
+      setScreenSize({
+        width: window.innerWidth,
+        height: window.innerHeight,
+      });
+    };
+
+    window.addEventListener("resize", handleResize);
+    return () => {
+      window.removeEventListener("resize", handleResize);
+    };
+  }, []);
+
   return (
     <section
       id={"NRTL"}
@@ -211,87 +234,91 @@ export default function NRTL({
             </div>
           )}
         </div>
-
-        <table>
-          <thead>
-            <tr>
-              {datas.tableHead.map(
-                (head: string, index: number): ReactElement => (
-                  <th
-                    key={index}
-                    onClick={
-                      enableColumnSorting
-                        ? (): void => requestSort(index)
-                        : undefined
-                    }
-                    style={{
-                      cursor: enableColumnSorting ? "pointer" : "default",
-                    }}
-                  >
-                    {head}
-                    {enableColumnSorting && (
-                      <div>
-                        <span
-                          className={`chevron ${
-                            sortConfig?.key === index &&
-                            sortConfig.direction === "ascending"
-                              ? "chevron-active"
-                              : ""
-                          }`}
-                        >
-                          <svg width="12" height="12" viewBox="0 0 20 20">
-                            <polyline
-                              points="5,15 10,5 15,15"
-                              strokeWidth="2"
-                            />
-                          </svg>
-                        </span>
-                        <span
-                          className={`chevron ${
-                            sortConfig?.key === index &&
-                            sortConfig.direction === "descending"
-                              ? "chevron-active"
-                              : ""
-                          }`}
-                        >
-                          <svg width="12" height="12" viewBox="0 0 20 20">
-                            <polyline points="5,5 10,15 15,5" strokeWidth="2" />
-                          </svg>
-                        </span>
-                      </div>
-                    )}
-                  </th>
-                ),
-              )}
-            </tr>
-          </thead>
-          <tbody>
-            {currentData.length > 0 ? (
-              currentData.map(
-                (body: string[], index: number): ReactElement => (
-                  <tr key={index}>
-                    {body.map(
-                      (cell: string, cellIndex: number): ReactElement => (
-                        <td key={cellIndex}>{cell}</td>
-                      ),
-                    )}
-                  </tr>
-                ),
-              )
-            ) : (
+        <div className={"tableWrapper"}>
+          <table>
+            <thead>
               <tr>
-                <td
-                  colSpan={datas.tableHead.length}
-                  style={{ textAlign: "center" }}
-                >
-                  {language === "En"
-                    ? "No data available in table"
-                    : "Aucune donnée disponible dans le tableau"}
-                </td>
+                {datas.tableHead.map(
+                  (head: string, index: number): ReactElement => (
+                    <th
+                      key={index}
+                      onClick={
+                        enableColumnSorting
+                          ? (): void => requestSort(index)
+                          : undefined
+                      }
+                      style={{
+                        cursor: enableColumnSorting ? "pointer" : "default",
+                      }}
+                    >
+                      {head}
+                      {enableColumnSorting && (
+                        <div>
+                          <span
+                            className={`chevron ${
+                              sortConfig?.key === index &&
+                              sortConfig.direction === "ascending"
+                                ? "chevron-active"
+                                : ""
+                            }`}
+                          >
+                            <svg width="12" height="12" viewBox="0 0 20 20">
+                              <polyline
+                                points="5,15 10,5 15,15"
+                                strokeWidth="2"
+                              />
+                            </svg>
+                          </span>
+                          <span
+                            className={`chevron ${
+                              sortConfig?.key === index &&
+                              sortConfig.direction === "descending"
+                                ? "chevron-active"
+                                : ""
+                            }`}
+                          >
+                            <svg width="12" height="12" viewBox="0 0 20 20">
+                              <polyline
+                                points="5,5 10,15 15,5"
+                                strokeWidth="2"
+                              />
+                            </svg>
+                          </span>
+                        </div>
+                      )}
+                    </th>
+                  ),
+                )}
               </tr>
-            )}
-          </tbody>
-        </table>
+            </thead>
+            <tbody>
+              {currentData.length > 0 ? (
+                currentData.map(
+                  (body: string[], index: number): ReactElement => (
+                    <tr key={index}>
+                      {body.map(
+                        (cell: string, cellIndex: number): ReactElement => (
+                          <td key={cellIndex}>{cell}</td>
+                        ),
+                      )}
+                    </tr>
+                  ),
+                )
+              ) : (
+                <tr>
+                  <td
+                    colSpan={datas.tableHead.length}
+                    style={{ textAlign: "center" }}
+                  >
+                    {language === "En"
+                      ? "No data available in table"
+                      : "Aucune donnée disponible dans le tableau"}
+                  </td>
+                </tr>
+              )}
+            </tbody>
+          </table>
+        </div>
         {showPagination && (
           <div className="tableFooter">
             {sortedData && (
@@ -303,20 +330,37 @@ export default function NRTL({
             )}
             {showPreviousNextButtons && (
               <div className="buttonContainer">
-                <button
-                  className="button"
-                  onClick={handlePreviousPage}
-                  disabled={page === 1}
-                >
-                  {language === "En" ? "Previous" : "Précédent"}
-                </button>
-                <button
-                  className="button"
-                  onClick={handleNextPage}
-                  disabled={page === totalPages}
-                >
-                  {language === "En" ? "Next" : "Suivant"}
-                </button>
+                {screenSize.width < 768 ? (
+                  <>
+                    <IoChevronBack
+                      className={page === 1 ? "disabled" : "paginationIcn"}
+                      onClick={handlePreviousPage}
+                    />
+                    <IoChevronForward
+                      className={
+                        page === totalPages ? "disabled" : "paginationIcn"
+                      }
+                      onClick={handleNextPage}
+                    />
+                  </>
+                ) : (
+                  <>
+                    <button
+                      className="button"
+                      onClick={handlePreviousPage}
+                      disabled={page === 1}
+                    >
+                      {language === "En" ? "Previous" : "Précédent"}
+                    </button>
+                    <button
+                      className="button"
+                      onClick={handleNextPage}
+                      disabled={page === totalPages}
+                    >
+                      {language === "En" ? "Next" : "Suivant"}
+                    </button>
+                  </>
+                )}
               </div>
             )}
           </div>
